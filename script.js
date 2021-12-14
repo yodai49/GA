@@ -5,8 +5,8 @@ var eq = {
 var creatures=[];
 const genMax=100; //maximum number of generations
 const creMax=100; //maximum number of creatures in a generation
-const param=1;//evaluation parameter    IS NOT USED
-const eliteRatio=0.1;
+const param=1;//evaluation parameter   IT IS NOT USED
+const eliteRatio=0.3;
 
 function evalCreatures(gen){
   for(var i = 0; i < creMax;i++){
@@ -96,7 +96,7 @@ $("#gaButton").on("click",function(){ //calbuttion is clicked
     }
   }
   for(var i = 0;i < creMax;i++){ //randamly set into 0 generation
-    creatures[0][i].genes[0]=Math.floor(Math.random()*100-50);
+    creatures[0][i].genes[0]=Math.random()*10-5;
   }
   for(var i = 0; i < genMax-1;i++){
     evalCreatures(i);

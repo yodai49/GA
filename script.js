@@ -3,11 +3,11 @@ var eq = {
   coefs:[]
 }
 var creatures=[];
-const genMax=300; //maximum number of generations
+const genMax=500; //maximum number of generations
 const creMax=200; //maximum number of creatures in a generation
-const param=0.02;//evaluation parameter
-const eliteRatio=0.1;
-const mutationRatio=0.2;
+const param=0.05;//evaluation parameter
+const eliteRatio=0.3;
+const mutationRatio=0.1;
 
 function evalCreatures(gen){
   for(var i = 0; i < creMax;i++){
@@ -51,7 +51,8 @@ function procCreatures(nextGen){
         if(!j){
           diceMax+=creatures[nextGen-1][k].val;
         } else{
-          if (ancs[0] != k)  diceMax+=creatures[nextGen-1][k].val/Math.abs(creatures[nextGen-1][ancs[0]].genes[0]-creatures[nextGen-1][k].val);
+//          if (ancs[0] != k)  diceMax+=creatures[nextGen-1][k].val/Math.abs(creatures[nextGen-1][ancs[0]].genes[0]-creatures[nextGen-1][k].val);
+          if (ancs[0] != k)  diceMax+=creatures[nextGen-1][k].val/Math.pow(Math.abs(creatures[nextGen-1][ancs[0]].genes[0]-creatures[nextGen-1][k].val),1);
         }
       }    
       let dice=diceMax*Math.random();
@@ -60,7 +61,8 @@ function procCreatures(nextGen){
         if(!j){
           tempDice+=creatures[nextGen-1][k].val;
         } else{
-          if(ancs[0] != i)  tempDice+=creatures[nextGen-1][k].val/Math.abs(creatures[nextGen-1][ancs[0]].genes[0]-creatures[nextGen-1][k].val);
+//          if(ancs[0] != i)  tempDice+=creatures[nextGen-1][k].val/Math.abs(creatures[nextGen-1][ancs[0]].genes[0]-creatures[nextGen-1][k].val);
+          if(ancs[0] != i)  tempDice+=creatures[nextGen-1][k].val/Math.pow(Math.abs(creatures[nextGen-1][ancs[0]].genes[0]-creatures[nextGen-1][k].val),1);
         }
         if(dice<tempDice) {
           ancs[j]=k;

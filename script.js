@@ -5,8 +5,8 @@ var eq = {
 var creatures=[];
 const genMax=100; //maximum number of generations
 const creMax=100; //maximum number of creatures in a generation
-const param=0.02;//evaluation parameter
-const eliteRatio=0.2;
+const param=0.01;//evaluation parameter
+const eliteRatio=0.1;
 const mutationRatio=0.2;
 
 function evalCreatures(gen){
@@ -23,7 +23,7 @@ function printRes(gen){
   let tempResTxt="";
   for(var i = 0;i < creMax;i++){
     tempResTxt+=Number(creatures[gen][i].genes[0]).toFixed(2) + 
-      " eq_val:" + Number(Math.pow(creatures[gen][i].val,-param)).toFixed(2) 
+      " eq_val:" + Number(Math.pow(creatures[gen][i].val,-1/param)).toFixed(2) 
       // + " ancs:" + creatures[gen][i].ancestors
        + "\n";
   }

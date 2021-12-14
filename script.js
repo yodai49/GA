@@ -3,9 +3,9 @@ var eq = {
   coefs:[]
 }
 var creatures=[];
-const genMax=100; //maximum number of generations
-const creMax=100; //maximum number of creatures in a generation
-const param=0.01;//evaluation parameter
+const genMax=300; //maximum number of generations
+const creMax=200; //maximum number of creatures in a generation
+const param=0.02;//evaluation parameter
 const eliteRatio=0.1;
 const mutationRatio=0.2;
 
@@ -15,6 +15,13 @@ function evalCreatures(gen){
     for(var j = 0;j <= eq.freq;j++){
       tempVal+=Math.pow(creatures[gen][i].genes[0],j)*eq.coefs[j];
     }
+    // UPGRADE EVAL - - - START
+    let tempDifVal=0;
+    for(var j = 1;j <= eq.freq;j++){
+      tempDifVal+=Math.pow(creatures[gen][i].genes[0],j-1)*j*eq.coefs[j];
+    }
+    tempVal/=tempDifVal;
+    // UPGRADE EVAL - - - END
     creatures[gen][i].val=Math.pow(Math.abs(tempVal),-param);
   }
   creatures[gen].sort((a,b)=>b.val-a.val);
@@ -65,11 +72,11 @@ function procCreatures(nextGen){
     creatures[nextGen][i].ancestors=creatures[nextGen-1][i].ancestors+"G" + nextGen + "("+ancs[0] + "," + ancs[1] + ") ";
   }
   for(var i = 0;i < eliteNum;i++){
-    creatures[nextGen][genMax-(eliteNum+mutationNum)+i]=creatures[nextGen-1][i];
+    creatures[nextGen][creMax-(eliteNum+mutationNum)+i]=creatures[nextGen-1][i];
   }
   for(var i = 0;i < mutationNum;i++){
-    creatures[nextGen][genMax-(mutationNum)+i].genes[0]=randomlyChoose();
-    creatures[nextGen][genMax-(mutationNum)+i].ancestors+="M" + nextGen+ " ";
+    creatures[nextGen][creMax-(mutationNum)+i].genes[0]=randomlyChoose();
+    creatures[nextGen][creMax-(mutationNum)+i].ancestors+="M" + nextGen+ " ";
   }
 }
 $("#generateButton").on("click",function(){ //generatebutton is clicked

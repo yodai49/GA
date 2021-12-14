@@ -5,9 +5,9 @@ var eq = {
 var creatures=[];
 const genMax=100; //maximum number of generations
 const creMax=100; //maximum number of creatures in a generation
-const param=0.02;//evaluation parameter
+const param=1;//evaluation parameter   IT IS NOT USED
 const eliteRatio=0.2;
-const mutationRatio=0.2;
+const mutateRatio=0.1;
 
 function evalCreatures(gen){
   for(var i = 0; i < creMax;i++){
@@ -29,15 +29,11 @@ function printRes(gen){
   }
   document.getElementById("result").textContent=tempResTxt;
 }
-function randomlyChoose(){ //randomly choose(Mutation,initialize)
-  return Math.random()*10-5;
-}
 
 function procCreatures(nextGen){
   let ancs=[0,0];
   let eliteNum=Math.floor(creMax*eliteRatio);
-  let mutationNum=Math.floor(creMax*mutationRatio);
-  for(var i  = 0;i < creMax-(eliteNum+mutationNum);i++){
+  for(var i  = 0;i < creMax-eliteNum;i++){
     for(var j = 0;j < 2;j++){
       let diceMax=0;
       for(var k = 0;k < creMax;k++){
@@ -49,7 +45,7 @@ function procCreatures(nextGen){
       }    
       let dice=diceMax*Math.random();
       let tempDice=0;
-      for(var k = 0;k < creMax;k++){ //randomly choose parents
+      for(var k = 0;k < creMax;k++){ //randomly choose
         if(!j){
           tempDice+=creatures[nextGen-1][k].val;
         } else{
@@ -65,11 +61,7 @@ function procCreatures(nextGen){
     creatures[nextGen][i].ancestors=creatures[nextGen-1][i].ancestors+"G" + nextGen + "("+ancs[0] + "," + ancs[1] + ") ";
   }
   for(var i = 0;i < eliteNum;i++){
-    creatures[nextGen][genMax-(eliteNum+mutationNum)+i]=creatures[nextGen-1][i];
-  }
-  for(var i = 0;i < mutationNum;i++){
-    creatures[nextGen][genMax-(mutationNum)+i].genes[0]=randomlyChoose();
-    creatures[nextGen][genMax-(mutationNum)+i].ancestors+="M" + nextGen+ " ";
+    creatures[nextGen][genMax-eliteNum+i]=creatures[nextGen-1][i];
   }
 }
 $("#generateButton").on("click",function(){ //generatebutton is clicked
@@ -104,7 +96,7 @@ $("#gaButton").on("click",function(){ //calbuttion is clicked
     }
   }
   for(var i = 0;i < creMax;i++){ //randamly set into 0 generation
-    creatures[0][i].genes[0]=randomlyChoose()
+    creatures[0][i].genes[0]=Math.random()*10-5;
   }
   for(var i = 0; i < genMax-1;i++){
     evalCreatures(i);

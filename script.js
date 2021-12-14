@@ -6,7 +6,7 @@ var creatures=[];
 const genMax=100; //maximum number of generations
 const creMax=100; //maximum number of creatures in a generation
 const param=1;//evaluation parameter    IS NOT USED
-const eliteRatio=0.05;
+const eliteRatio=0.1;
 
 function evalCreatures(gen){
   for(var i = 0; i < creMax;i++){

@@ -5,7 +5,7 @@ var eq = {
 var creatures=[];
 const genMax=100; //maximum number of generations
 const creMax=100; //maximum number of creatures in a generation
-const param=1000;//evaluation parameter
+const param=100;//evaluation parameter
 
 function evalCreatures(gen){
   for(var i = 0; i < creMax;i++){
@@ -28,26 +28,16 @@ function printRes(gen){
 }
 
 function procCreatures(nextGen){
-  let ancs=[0,0];
+  let diceMax=0,ancs=[0,0];
+  for(var i = 0;i < creMax;i++){
+    diceMax+=creatures[nextGen-1][i].val;
+  }
   for(var i  = 0;i < creMax;i++){
     for(var j = 0;j < 2;j++){
-      let diceMax=0;
-      for(var k = 0;k < creMax;k++){
-        if(!j){
-          diceMax+=creatures[nextGen-1][k].val;
-        } else{
-          if (ancs[0] != k)  diceMax+=creatures[nextGen-1][k].val/Math.abs(creatures[nextGen-1][ancs[0]].genes[0]-creatures[nextGen-1][k].val);
-        }
-      }    
       let dice=diceMax*Math.random();
       let tempDice=0;
       for(var k = 0;k < creMax;k++){ //randomly choose
-        if(!j){
-          tempDice+=creatures[nextGen-1][k].val;
-        } else{
-          if(ancs[0] != i)  tempDice+=creatures[nextGen-1][k].val/Math.abs(creatures[nextGen-1][ancs[0]].genes[0]-creatures[nextGen-1][k].val);
-        }
-        //tempDice+=creatures[nextGen-1][k].val;
+        tempDice+=creatures[nextGen-1][k].val;
         if(dice<tempDice) {
           ancs[j]=k;
           break;
@@ -71,7 +61,7 @@ $("#generateButton").on("click",function(){ //generatebutton is clicked
         if (eq.coefs[i]>0) resTxt+="+";
         if (eq.coefs[i]<0) resTxt+="-";
       }  
-      if (Math.abs(eq.coefs[i])!=1 || i == 0) resTxt+=Math.abs(eq.coefs[i]);
+      if (Math.abs(eq.coefs[i])!=1 || i == 1) resTxt+=Math.abs(eq.coefs[i]);
       if(i) resTxt+="x^"+i;
     }
   }

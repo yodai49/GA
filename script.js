@@ -5,17 +5,28 @@ var eq = {
 var creatures=[];
 const genMax=100; //maximum number of generations
 const creMax=100; //maximum number of creatures in a generation
-const param=10;//evaluation parameter
+const param=100;//evaluation parameter
 
 function evalCreatures(gen){
   for(var i = 0; i < creMax;i++){
     let tempVal=0;
     for(var j = 0;j <= eq.freq;j++){
-      tempVal+=Math.pow(creatures[gen][i].genes[0],j)*cofes[j];
+      tempVal+=Math.pow(creatures[gen][i].genes[0],j)*eq.coefs[j];
     }
-    creatures[gen][i].val=param/tempVal;
+    creatures[gen][i].val=Math.abs(param/tempVal);
   }
 }
+function printRes(gen){
+  let tempResTxt="";
+  for(var i = 0;i < creMax;i++){
+    tempResTxt+=creatures[gen][i].genes[0] + 
+      " eq_val:" + Number(param/creatures[gen][i].val).toFixed(2) 
+      // + " ancs:" + creatures[gen][i].ancestors
+       + "\n";
+  }
+  document.getElementById("result").textContent=tempResTxt;
+}
+
 function procCreatures(nextGen){
   let diceMax=0,ancs=[0,0];
   for(var i = 0;i < creMax;i++){
@@ -32,9 +43,9 @@ function procCreatures(nextGen){
           break;
         }
       }
-    }  
-    creatures[nextGen][i].genes[0] = (ancs[0]+ancs[1])/2;
-    creatures[nextGen][i].ancestors+="G" + nextGen + "("+ancs[0] + "," + ancs[1] + ") ";
+    }
+    creatures[nextGen][i].genes[0] = (creatures[nextGen-1][ancs[0]].genes[0]+creatures[nextGen-1][ancs[1]].genes[0])/2;
+    creatures[nextGen][i].ancestors=creatures[nextGen-1][i].ancestors+"G" + nextGen + "("+ancs[0] + "," + ancs[1] + ") ";
   }
 }
 $("#generateButton").on("click",function(){ //generatebutton is clicked
@@ -57,7 +68,7 @@ $("#generateButton").on("click",function(){ //generatebutton is clicked
   document.getElementById("generatedEq").textContent=resTxt; //show equation text
 });
 
-$("gaButton").on("click",function(){ //calbuttion is clicked
+$("#gaButton").on("click",function(){ //calbuttion is clicked
   for(var i = 0;i < genMax;i++){
     creatures[i]=[];
     for(var j = 0;j < creMax;j++){
@@ -76,11 +87,10 @@ $("gaButton").on("click",function(){ //calbuttion is clicked
     procCreatures(i+1);
   }
   evalCreatures(genMax-1);
-  let tempResTxt="";
-  for(var i = 0;i < creMax;i++){
-    tempResTxt+=creatures[genMax-1][i].genes[0] + 
-      " eq_val:" + param/creatures[genMax-1][i].val + 
-      " ancs:" + creatures[genMax-1][i].ancestors + "\n";
-  }
-  document.getElementById("resTxt").textContent=tempResTxt;
+  printRes(genMax-1);
+});
+
+$("#checkButton").on("click",function(){
+  let checkGen=window.prompt("Which generations do you want to check? (0-" + (genMax-1)+")",0);
+  printRes(checkGen);
 });
